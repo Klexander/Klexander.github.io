@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    td {
+        width: 20%;
+    }
+</style>
+</head>
+<body>
+
+<h2>Erweiterter Euklidischer Algorithmus</h2>
+
+<p id="solution">Für chinesischen Restsatz:<br>links Ni, rechts ni</p>
+<input type="number" id="a" value="variable a">
+<input type="number" id="b" value="variable b">
+<button onclick="euclid()">Do stuff</button> 
+
+<script>
+function euclid(){
+	var a = parseInt(document.getElementById("a").value);
+	var b = parseInt(document.getElementById("b").value);
+	if(a<b){
+        var temp = a;
+        a=b;
+        b=temp;
+    }
+	var q=parseInt(a/b);
+	var x1,x2,x3=0;
+	x1=0;
+	x2=1;
+	x3=0;
+	var y1,y2,y3=0;
+    y1=0;
+    y2=0;
+	y3=1;
+	var t=0;
+    var result = "<table border='solid'><tr><th>ai-1</th><th>ai</th><th>qi</th><th>xi</th><th>yi</th></tr>";
+    result+="<tr><td></td><td>"+a+"</td><td></td><td>1</td><td>0</td></tr>";
+    result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+q+"</td><td>0</td><td>1</td></tr>";
+	while(b!=0 && t<100){
+		x1=x2;x2=x3;
+		y1=y2;y2=y3;
+		
+		x3=x1-q*x2;
+		y3=y1-q*y2;
+		
+		var tempa=a;
+		a=b;
+		b=tempa-q*b;
+		q=parseInt(a/b);
+        if(b!=0){
+            result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+q+"</td><td>"+x3+"</td><td>"+y3+"</td><tr>";
+        }else{
+            result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+"</td><td>"+"</td><td>"+"</td><tr>";
+		}
+        
+		t=t+1;
+	}
+    var china = "<br>Für Chinesischen Restsatz :<br>";
+    china+="ti ="+x2+", si ="+y2;
+	document.getElementById("solution").innerHTML = result+"</table>"+china;
+}
+</script>
+
+
+</body>
+</html> 
