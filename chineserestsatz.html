@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chinesischer Restsatz</title>
+<style>
+    td {
+        width: 20%;
+    }
+</style>
+</head>
+<body>
+
+<h2>Berechnung Simultaner Kongruenz nach chinesischem Restsatz</h2>
+
+<p>Gleichung 1 (x=a mod b)<br>links a, rechts b</p>
+<input type="number" id="a1" value="variable a">
+<input type="number" id="b1" value="variable b">
+<p>Gleichung 2<br>links a, rechts b</p>
+<input type="number" id="a2" value="variable a">
+<input type="number" id="b2" value="variable b">
+<p>Gleichung 3<br>links a, rechts b</p>
+<input type="number" id="a3" value="variable a">
+<input type="number" id="b3" value="variable b">
+<button onclick="china()">Do stuff</button> 
+<h1 id="error"></h1>
+<div id="eu1"></div>
+<div id="eu2"></div>
+<div id="eu3"></div>
+<div id="solution"></div>
+
+<script>
+function euclid(a,b,index){
+	var a = parseInt(a);
+	var b = parseInt(b);
+	if(a<b){
+        var temp = a;
+        a=b;
+        b=temp;
+    }
+	var q=parseInt(a/b);
+	var x1,x2,x3=0;
+	x1=0;
+	x2=1;
+	x3=0;
+	var y1,y2,y3=0;
+    y1=0;
+    y2=0;
+	y3=1;
+	var t=0;
+    var result = "<table border='solid'><tr><th>ai-1</th><th>ai</th><th>qi</th><th>xi</th><th>yi</th></tr>";
+    result+="<tr><td></td><td>"+a+"</td><td></td><td>1</td><td>0</td></tr>";
+    result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+q+"</td><td>0</td><td>1</td></tr>";
+	while(b!=0 && t<100){
+		x1=x2;x2=x3;
+		y1=y2;y2=y3;
+		
+		x3=x1-q*x2;
+		y3=y1-q*y2;
+		
+		var tempa=a;
+		a=b;
+		b=tempa-q*b;
+		q=parseInt(a/b);
+        if(b!=0){
+            result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+q+"</td><td>"+x3+"</td><td>"+y3+"</td><tr>";
+        }else{
+            result+="<tr><td>"+a+"</td><td>"+b+"</td><td>"+"</td><td>"+"</td><td>"+"</td><tr>";
+		}
+        
+		t=t+1;
+	}
+	document.getElementById("eu"+index).innerHTML ="Berechnung t"+index+"<br>"+result+"</table>"+
+	"t"+index+"= "+x2;
+	if(a!=1){
+	document.getElementById("error").innerHTML = "nicht anwendbar da nicht teilerfremd";
+	}
+	return x2+","+y2;
+	}
+function china(){
+	var a1=parseInt(document.getElementById("a1").value);
+	var b1=parseInt(document.getElementById("b1").value);
+	var a2=parseInt(document.getElementById("a2").value);
+	var b2=parseInt(document.getElementById("b2").value);
+	var a3=parseInt(document.getElementById("a3").value);
+	var b3=parseInt(document.getElementById("b3").value);
+	
+	var solution1=euclid(b2*b3,b1,1);
+	var solution2=euclid(b1*b3,b2,2);
+	var solution3=euclid(b1*b2,b3,3);
+	solution1=solution1.split(",");
+	solution2=solution2.split(",");
+	solution3=solution3.split(",");
+	var solution=a1*b2*b3*solution1[0]+a2*b1*b3*solution2[0]+a3*b1*b2*solution3[0];
+	var correctedsolution=solution;
+	while(correctedsolution<0){
+		correctedsolution+=b1*b2*b3;
+	}
+	var calculation="<br>"+a1+"*"+b2+"*"+b3+"*"+solution1[0]+"+"+
+	a2+"*"+b1+"*"+b3+"*"+solution2[0]+"+"+
+	a3+"*"+b1+"*"+b2+"*"+solution3[0]+"=";
+	document.getElementById("solution").innerHTML = calculation+solution+"("+correctedsolution+")"+" mod "+b1*b2*b3;
+}
+</script>
+
+
+</body>
+</html> 
